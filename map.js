@@ -34,44 +34,89 @@ function wooparoopa() {
     ctx.beginPath()
     ctx.arc(posX, posY - 40, character.size, Math.PI * 2, 0)
     ctx.fill()
-    
+    ctx.stroke()
     ctx.clip() // overflow 만들때
     
     // 볼터치
     ctx.fillStyle = 'pink'
     ctx.beginPath()
-    ctx.arc(posX - 20, posY - 30, 8, Math.PI * 2, 0)
+    ctx.ellipse(posX + 24 * lookPukkok, posY - 36, 6, 3, 0, Math.PI * 2, 0)
+    ctx.ellipse(posX - 1 * lookPukkok, posY - 36, 6, 3, 0, Math.PI * 2, 0)
     ctx.fill()
-    ctx.arc(posX + 20, posY - 30, 8, Math.PI * 2, 0)
-    ctx.fill()
-    
     ctx.restore() // 클립 종료
-    
-    // 얼굴테두리
+
     ctx.beginPath()
     ctx.arc(posX, posY - 40, character.size, Math.PI * 2, 0)
     ctx.stroke()
+    
+    // 머리 뿔
+    const symmeteries = [1, -1] // 대칭
+    symmeteries.forEach(num => {
+        // 직각
+        ctx.fillStyle = 'blue'
+        ctx.lineWidth = 4
+        ctx.beginPath()
+        ctx.moveTo(posX + character.size * num, posY - 40)
+        ctx.lineTo(posX + (character.size + 20) * num , posY - 42)
+        ctx.lineTo(posX + character.size * num, posY - 44)
+        ctx.fill()
+        ctx.closePath()
 
+        ctx.beginPath()
+        ctx.moveTo(posX + (character.size + 2) * num, posY - 42)
+        ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 62, posX + (character.size + 6) * num, posY - 42)
+        ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 22, posX + (character.size + 2) * num, posY - 42)
+        ctx.fill()
+    
+        ctx.beginPath()
+        ctx.moveTo(posX + (character.size + 8) * num, posY - 42)
+        ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 52, posX + (character.size + 12) * num, posY - 42)
+        ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 32, posX + (character.size + 8) * num, posY - 42)
+        ctx.fill()
+
+        // ctx.beginPath()
+        // ctx.moveTo(posX + (character.size - 2) * num, posY - 50)
+        // ctx.lineTo(posX + (character.size + 18) * num , posY - 58)
+        // ctx.lineTo(posX + (character.size - 6) * num, posY - 54)
+        // ctx.fill()
+        // ctx.closePath()
+
+        // ctx.beginPath()
+        // ctx.moveTo(posX + (character.size + 2) * num, posY - 42)
+        // ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 62, posX + (character.size + 6) * num, posY - 42)
+        // ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 22, posX + (character.size + 2) * num, posY - 42)
+        // ctx.fill()
+    
+        // ctx.beginPath()
+        // ctx.moveTo(posX + (character.size + 8) * num, posY - 42)
+        // ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 52, posX + (character.size + 12) * num, posY - 42)
+        // ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 32, posX + (character.size + 8) * num, posY - 42)
+        // ctx.fill()
+
+
+    })
+
+    // 입
     ctx.strokeStyle = '#111'
     ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(posX + (lookPukkok * 18), posY - 30)
-    ctx.quadraticCurveTo(posX + (lookPukkok * 12), posY - 25, posX + (lookPukkok * 6), posY - 30)
+    ctx.quadraticCurveTo(posX + (lookPukkok * 12), posY - 28, posX + (lookPukkok * 6), posY - 30)
     ctx.stroke()
 
     // 눈
     ctx.fillStyle = '#111'
+    // ctx.beginPath()
+    // ctx.ellipse(posX + (lookPukkok * 4), posY - 42, 4, 8, 0, 0, Math.PI * 2)
+    // ctx.fill()
+    // ctx.beginPath()
+    // ctx.ellipse(posX + (lookPukkok * 16), posY - 42, 4, 8, 0, 0, Math.PI * 2)
+    // ctx.fill()
     ctx.beginPath()
-    ctx.ellipse(posX + (lookPukkok * 4), posY - 42, 4, 8, 0, 0, Math.PI * 2)
+    // ctx.fillStyle = '#f8f9fa'
+    ctx.arc(posX + (lookPukkok * 6), posY - 44, 2, 0, Math.PI * 2)
     ctx.fill()
-    ctx.beginPath()
-    ctx.ellipse(posX + (lookPukkok * 16), posY - 42, 4, 8, 0, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.beginPath()
-    ctx.fillStyle = '#f8f9fa'
-    ctx.arc(posX + (lookPukkok * 6), posY - 44, 3, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.arc(posX + (lookPukkok * 18), posY - 44, 3, 0, Math.PI * 2)
+    ctx.arc(posX + (lookPukkok * 18), posY - 44, 2, 0, Math.PI * 2)
     ctx.fill()
 
     ctx.fillStyle = 'blue'
@@ -90,6 +135,37 @@ function wooparoopa() {
     ctx.beginPath()
     ctx.arc(posX + 8, posY - 5, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
     ctx.fill()
+}
+
+function drawPortal(){
+    const posX = mapWidth / 4 * 3 - cameraX
+    const posY = mapHeight / 2 - cameraY
+    ctx.fillStyle = 'violet'
+    
+    ctx.beginPath()
+    ctx.ellipse(posX, posY - 100, 40, 80, 0, Math.PI * 2, 0)
+    ctx.fill()
+    ctx.closePath()
+
+    ctx.save()
+    ctx.translate(posX, posY - 100)
+    ctx.rotate(wind * 0.02)
+    ctx.strokeStyle = 'black'
+    ctx.lineWidth = 3
+    
+    const deg = Math.PI / 2
+    
+    // 빙글빙글
+    ctx.beginPath()
+    Array(7).fill(0).forEach((_, idx) => {
+        idx % 2 ?
+        ctx.arc(0, 4, (idx+1) * 4, -deg, deg) : 
+        ctx.arc(0, 0, (idx+1) * 4, deg, -deg) 
+    })
+    ctx.stroke()
+    ctx.closePath()
+
+    ctx.restore()
 }
 
 function aboutMe () {
@@ -269,6 +345,7 @@ function drawMap() {
     }
     dream()
     wooparoopa()
+    drawPortal()
     manual()
     // aboutMe()
     // projectVillage()
