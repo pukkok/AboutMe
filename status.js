@@ -58,11 +58,11 @@ let questions = [
     },
     {
         q: '왜 개발자가 \n되고 싶었나요?', 
-        a: '눈높이를 \n뒤집어보세요!'
+        a: '     \n뒤집어보세요!'
     },
     {
         q: '왜 푹곡이란 닉네임을 \n사용하나요?', 
-        a: '모두와의 눈높이를 \n맞추겠다는 마음가짐을 \n가지고 있습니다.' 
+        a: `앞에 있다면 눈높이를 맞춰 \n함께 가겠다는 마음가짐을, \n뒤에 있다면 눈높이를 맞추기 위해 \n좀 더 나아가겠다는 뜻입니다.` 
     },
     {
         q: '최근 관심을 가지고 있는건 \n무엇인가요?', 
@@ -73,21 +73,22 @@ let questions = [
         a: '눈높이를 \n뒤집어보세요!' 
     },
     {
-        q: '최근 관심을 가지고 있는건 \n무엇인가요?', 
-        a: '눈높이를 \n뒤집어보세요!' 
+        q: '여자친구를 뭐라고 \n부르나요?', 
+        a: '우파루파!' 
+    },
+    {
+        q: '여자친구 있나요?', 
+        a: '네. 있습니다' 
     },
     {
         q: '최근 관심을 가지고 있는건 \n무엇인가요?', 
-        a: '눈높이를 \n뒤집어보세요!' 
-    },
-    {
-        q: '최근 관심을 가지고 있는건 \n무엇인가요?', 
-        a: '캔버스라는 태그에 \n푹 빠져있어요' 
+        a: '캔버스라는 HTML 태그를 사용하여 \n개발하는 것에 푹 빠져있어요' 
     },
 ]
 questions = questions.map((question, idx) => {
-    let modI = idx % 4
-    posX = idx * 200 + Math.random() * 100
+    const sign = Math.random() > 0.5 ? 1 : -1
+    const modI = idx % 4
+    posX = idx * 300 + Math.random() * 100 * sign
     posY = skyHeight + modI * 250 + Math.random() * 100
     
     return question = {...question, posX, posY}
@@ -101,8 +102,11 @@ const portal = {
     color: 'purple'
 }
 
-const cloudImage = new Image();
-cloudImage.src = './public/text-cloud.png';
+const cloudImage = new Image()
+cloudImage.src = './public/text-cloud2.png'
+
+const teriormon = new Image()
+teriormon.src = './public/teriormon.png'
 
 cloudImage.onload = function() {
     // drawMap 함수에서 이미지 사용

@@ -79,12 +79,12 @@ function pukkok(x, y) {
     // 눈높이 머리
     ctx.fillStyle = '#f1f3f5'
     ctx.beginPath()
-    ctx.arc(x, y, character.size, 0, Math.PI * 2)
+    ctx.arc(x, y, 25, 0, Math.PI * 2)
     ctx.fill()
     ctx.strokeStyle = 'red'
     ctx.lineWidth = 4
     ctx.beginPath()
-    ctx.arc(x, y, character.size, 0, Math.PI * 2)
+    ctx.arc(x, y, 25, 0, Math.PI * 2)
     ctx.stroke()
 
     ctx.fillStyle = 'red'
@@ -98,20 +98,20 @@ function pukkok(x, y) {
     ctx.fillStyle = 'red'
     // 손
     ctx.beginPath()
-    ctx.arc(x + (character.size + 2) * directionCheck, y + 15, 6, 0, Math.PI * 2)
+    ctx.arc(x + 27, y + 15, 6, 0, Math.PI * 2)
     ctx.fill()
     ctx.beginPath()
-    ctx.arc(x + (character.size + 2) * -directionCheck, y + 15, 6, 0, Math.PI * 2)
+    ctx.arc(x - 27, y + 15, 6, 0, Math.PI * 2)
     ctx.fill()
 
     // 왼 발
     ctx.beginPath()
-    ctx.arc(x + (8) * - directionCheck, y + character.size + 10, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
+    ctx.arc(x + 8, y + 35, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
     ctx.fill()
 
     // 오른 발
     ctx.beginPath()
-    ctx.arc(x + (8) * directionCheck, y + character.size + 10, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
+    ctx.arc(x - 8, y + 35, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
     ctx.fill()
 
     // 눈
@@ -120,7 +120,7 @@ function pukkok(x, y) {
     ctx.ellipse(x - 2 * directionCheck, y, 6, 10, 0, 0, Math.PI * 2)
     ctx.fill()
     ctx.beginPath()
-    ctx.ellipse(x + 15 * directionCheck, y, 6, 10, 0, 0, Math.PI * 2)
+    ctx.ellipse(x + 16 * directionCheck, y, 6, 10, 0, 0, Math.PI * 2)
     ctx.fill()
     ctx.beginPath()
     ctx.fillStyle = '#f8f9fa'
@@ -135,7 +135,6 @@ function pukkok(x, y) {
     ctx.ellipse(x+8 * directionCheck, y + 10, 4, 8, 0, 0, Math.PI)
     ctx.fill()
 }
-
 
 function drawCharacter(x, y) {
     ctx.save()
@@ -163,7 +162,7 @@ function drawCharacter(x, y) {
 
     pukkok(x, y)
     isMove && booster(isBoost)
-    
+
     function booster (on = false) {
         let pointX = x + 35 * - directionCheck
         let pointY = y + character.size / 2

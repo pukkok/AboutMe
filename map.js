@@ -14,6 +14,83 @@ function bg(){
     ctx.fillStyle = ground
     ctx.fillRect(- cameraX, mapHeight / 2 - cameraY, mapWidth, mhh)
 }
+function guide () {
+    ctx.drawImage(teriormon, mapWidth - 150 - cameraX, mapHeight / 2 - cameraY - 150, 150, 150)
+
+    
+}
+function wooparoopa() {
+    ctx.strokeStyle = 'blue'
+    ctx.fillStyle = 'white'
+    ctx.lineWidth = 4
+    let lookPukkok = mapWidth / 2 + 100 > character.x ? -1 : 1
+
+    const posX = mapWidth / 2 - cameraX + 100
+    const posY = mapHeight / 2 - cameraY
+
+    ctx.save() // 이전 상태 저장
+
+    // 얼굴
+    ctx.beginPath()
+    ctx.arc(posX, posY - 40, character.size, Math.PI * 2, 0)
+    ctx.fill()
+    
+    ctx.clip() // overflow 만들때
+    
+    // 볼터치
+    ctx.fillStyle = 'pink'
+    ctx.beginPath()
+    ctx.arc(posX - 20, posY - 30, 8, Math.PI * 2, 0)
+    ctx.fill()
+    ctx.arc(posX + 20, posY - 30, 8, Math.PI * 2, 0)
+    ctx.fill()
+    
+    ctx.restore() // 클립 종료
+    
+    // 얼굴테두리
+    ctx.beginPath()
+    ctx.arc(posX, posY - 40, character.size, Math.PI * 2, 0)
+    ctx.stroke()
+
+    ctx.strokeStyle = '#111'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(posX + (lookPukkok * 18), posY - 30)
+    ctx.quadraticCurveTo(posX + (lookPukkok * 12), posY - 25, posX + (lookPukkok * 6), posY - 30)
+    ctx.stroke()
+
+    // 눈
+    ctx.fillStyle = '#111'
+    ctx.beginPath()
+    ctx.ellipse(posX + (lookPukkok * 4), posY - 42, 4, 8, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.ellipse(posX + (lookPukkok * 16), posY - 42, 4, 8, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.fillStyle = '#f8f9fa'
+    ctx.arc(posX + (lookPukkok * 6), posY - 44, 3, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.arc(posX + (lookPukkok * 18), posY - 44, 3, 0, Math.PI * 2)
+    ctx.fill()
+
+    ctx.fillStyle = 'blue'
+    //손
+    ctx.beginPath()
+    ctx.arc(posX - 27, posY - 25, 6, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(posX + 27, posY - 25, 6, 0, Math.PI * 2)
+    ctx.fill()
+
+    // 발
+    ctx.beginPath()
+    ctx.arc(posX - 8, posY - 5, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(posX + 8, posY - 5, 7, Math.PI * 2 / 360 * 30, Math.PI * 2 / 360 * 150, true)
+    ctx.fill()
+}
 
 function aboutMe () {
 
@@ -87,9 +164,10 @@ function projectVillage () {
 function dream () {
     ctx.textAlign = 'left'
     // 질문 구름
-    let longestWidth = 0
-    let longestLength = 0
+    
     questions.forEach((question, i) => {
+        let longestWidth = 0
+        let longestLength = 0
         const {q, a, posX, posY} = question
         const qs = q.split('\n')
         const as = a.split('\n')
@@ -99,8 +177,9 @@ function dream () {
             if(longestWidth < textWidth) longestWidth = textWidth
         })
         qs.length > as.length ? longestLength = qs.length : longestLength = as.length
+        if(longestLength === 1) longestLength = 2
         const width = longestWidth + 100
-        const height = 100 * longestLength * 1.3
+        const height = 100 * longestLength
 
         let imagineX = posX - cameraX + width - wind
         if(imagineX < -width){
@@ -110,7 +189,7 @@ function dream () {
         }
         const imagineY = posY - cameraY - height
 
-        ctx.drawImage(cloudImage, imagineX, imagineY, width, height);
+        ctx.drawImage(cloudImage, imagineX, imagineY, width, height)
 
         // 실제 x, y 값
         let cloudScreenX = posX + width - wind
@@ -181,14 +260,15 @@ function bugVillage(){
 function drawMap() {
     // 기본 배경
     bg()
-
+    guide()
+    
     if(wind <= mapWidth){
         wind += 2
     }else{
         wind = 0
     }
     dream()
-
+    wooparoopa()
     manual()
     // aboutMe()
     // projectVillage()
