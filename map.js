@@ -1,3 +1,4 @@
+// 맵 배경
 function bg(){
     const sky = ctx.createLinearGradient(mhw - cameraX, -cameraY, mhw - cameraX, mhh - cameraY)
     sky.addColorStop(0, 'black')
@@ -14,22 +15,31 @@ function bg(){
     ctx.fillStyle = ground
     ctx.fillRect(- cameraX, mapHeight / 2 - cameraY, mapWidth, mhh)
 }
+// 테리어몬
 function guide () {
     ctx.drawImage(teriormon, mapWidth - 150 - cameraX, mapHeight / 2 - cameraY - 150, 150, 150)
-
-    
 }
+// 우파루파
 function wooparoopa() {
-    ctx.strokeStyle = 'blue'
+    const skinColor = '#ffb6c1'
+
+    ctx.strokeStyle = skinColor
     ctx.fillStyle = 'white'
     ctx.lineWidth = 4
     let lookPukkok = mapWidth / 2 + 100 > character.x ? -1 : 1
+
+    // 마주보고 있는가?
+    const isfaceEachOther = -lookPukkok === directionCheck
 
     const posX = mapWidth / 2 - cameraX + 100
     const posY = mapHeight / 2 - cameraY
 
     ctx.save() // 이전 상태 저장
 
+    const isWithinPukkok = isWithinRect(mapWidth / 2 - 200, mapHeight / 2 - 300, mapWidth / 2 + 200, mapHeight / 2 + 300)
+    if(isWithinPukkok && isfaceEachOther){
+        commentCloud(posX, posY - 110, ['❤️'])
+    }
     // 얼굴
     ctx.beginPath()
     ctx.arc(posX, posY - 40, character.size, Math.PI * 2, 0)
@@ -52,8 +62,8 @@ function wooparoopa() {
     // 머리 뿔
     const symmeteries = [1, -1] // 대칭
     symmeteries.forEach(num => {
-        // 직각
-        ctx.fillStyle = 'blue'
+        // 더듬이
+        ctx.fillStyle = '#4dd6d3'
         ctx.lineWidth = 4
         ctx.beginPath()
         ctx.moveTo(posX + character.size * num, posY - 40)
@@ -73,27 +83,6 @@ function wooparoopa() {
         ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 52, posX + (character.size + 12) * num, posY - 42)
         ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 32, posX + (character.size + 8) * num, posY - 42)
         ctx.fill()
-
-        // ctx.beginPath()
-        // ctx.moveTo(posX + (character.size - 2) * num, posY - 50)
-        // ctx.lineTo(posX + (character.size + 18) * num , posY - 58)
-        // ctx.lineTo(posX + (character.size - 6) * num, posY - 54)
-        // ctx.fill()
-        // ctx.closePath()
-
-        // ctx.beginPath()
-        // ctx.moveTo(posX + (character.size + 2) * num, posY - 42)
-        // ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 62, posX + (character.size + 6) * num, posY - 42)
-        // ctx.quadraticCurveTo(posX + (character.size + 12) * num, posY - 22, posX + (character.size + 2) * num, posY - 42)
-        // ctx.fill()
-    
-        // ctx.beginPath()
-        // ctx.moveTo(posX + (character.size + 8) * num, posY - 42)
-        // ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 52, posX + (character.size + 12) * num, posY - 42)
-        // ctx.quadraticCurveTo(posX + (character.size + 16) * num, posY - 32, posX + (character.size + 8) * num, posY - 42)
-        // ctx.fill()
-
-
     })
 
     // 입
@@ -106,20 +95,13 @@ function wooparoopa() {
 
     // 눈
     ctx.fillStyle = '#111'
-    // ctx.beginPath()
-    // ctx.ellipse(posX + (lookPukkok * 4), posY - 42, 4, 8, 0, 0, Math.PI * 2)
-    // ctx.fill()
-    // ctx.beginPath()
-    // ctx.ellipse(posX + (lookPukkok * 16), posY - 42, 4, 8, 0, 0, Math.PI * 2)
-    // ctx.fill()
     ctx.beginPath()
-    // ctx.fillStyle = '#f8f9fa'
     ctx.arc(posX + (lookPukkok * 6), posY - 44, 2, 0, Math.PI * 2)
     ctx.fill()
     ctx.arc(posX + (lookPukkok * 18), posY - 44, 2, 0, Math.PI * 2)
     ctx.fill()
 
-    ctx.fillStyle = 'blue'
+    ctx.fillStyle = skinColor
     //손
     ctx.beginPath()
     ctx.arc(posX - 27, posY - 25, 6, 0, Math.PI * 2)
@@ -142,30 +124,183 @@ function drawPortal(){
     const posY = mapHeight / 2 - cameraY
     ctx.fillStyle = 'violet'
     
-    ctx.beginPath()
-    ctx.ellipse(posX, posY - 100, 40, 80, 0, Math.PI * 2, 0)
-    ctx.fill()
-    ctx.closePath()
+    function circle () {
+        const grd = ctx.createRadialGradient(posX, posY - 100, 20, posX, posY - 100 , 80)
+        grd.addColorStop(0, 'white')
+        grd.addColorStop(0.1, 'violet')
+        grd.addColorStop(1, 'purple')
+        ctx.fillStyle = grd
+        ctx.beginPath()
+        ctx.ellipse(posX, posY - 100, 40 + portalIncrease, 80, 0, Math.PI * 2, 0)
+        ctx.fill()
+        ctx.closePath()
+    }
+
+    function moveLink () {
+        ctx.textAlign = 'center'
+        ctx.fillStyle = 'purple'
+        ctx.fillText('유치원모으미', posX, posY - portalIncrease - 160)
+        ctx.fillText('브라우저(A)', posX - 110 - portalIncrease, posY - 100)
+        ctx.fillText('깃허브(D)', posX + 100 + portalIncrease, posY - 100)
+    }
+
+    const isWithinPortal = isWithinRect(mapWidth / 4 * 3 - 40 , mapHeight / 2 - 180, 120, 160)
+    if(isWithinPortal){
+        if(portalIncrease < 40) portalIncrease ++
+        // 유치원모으미
+        moveLink()
+        if(keys.a){
+            keys.a = false 
+            window.open(urlBox.kinder.browser)
+        }
+        if(keys.d){
+            keys.d = false
+            window.open(urlBox.kinder.github) 
+        }
+    }else{
+        if(portalIncrease > 1) portalIncrease --
+    }
+    circle()
+
+    
+    
+
 
     ctx.save()
     ctx.translate(posX, posY - 100)
     ctx.rotate(wind * 0.02)
-    ctx.strokeStyle = 'black'
+    ctx.strokeStyle = 'purple'
     ctx.lineWidth = 3
-    
-    const deg = Math.PI / 2
     
     // 빙글빙글
     ctx.beginPath()
     Array(7).fill(0).forEach((_, idx) => {
-        idx % 2 ?
-        ctx.arc(0, 4, (idx+1) * 4, -deg, deg) : 
-        ctx.arc(0, 0, (idx+1) * 4, deg, -deg) 
+        let deg = Math.PI / 2
+        if(idx % 2) deg = -deg
+        ctx.arc(0, (idx % 2) * 4, (idx+1) * 4 + portalIncrease, idx === 0 ? deg / 2 : deg, -deg) 
     })
     ctx.stroke()
     ctx.closePath()
 
     ctx.restore()
+
+}
+
+
+// 질문 구름
+function dream () {
+    ctx.textAlign = 'left'
+    
+    questions.forEach((question, i) => {
+        let longestWidth = 0
+        let longestLength = 0
+        const {q, a, posX, posY} = question
+        const qs = q.split('\n')
+        const as = a.split('\n')
+        const merges = [...qs, ...as]
+        // 가장 긴 넓이 찾기
+        merges.forEach(l => {
+            const textWidth = ctx.measureText(l).width
+            if(longestWidth < textWidth) longestWidth = textWidth
+        })
+        // 가장 긴 배열 길이 찾기
+        qs.length > as.length ? longestLength = qs.length : longestLength = as.length
+        if(longestLength === 1) longestLength = 2
+        const width = longestWidth + 100
+        const height = 100 * longestLength
+
+        let imagineX = posX - cameraX + width - wind
+        if(imagineX < -width){
+            imagineX += mapWidth
+        }else{
+            imagineX = posX - cameraX + width - wind
+        }
+        const imagineY = posY - cameraY - height
+
+        ctx.drawImage(cloudImage, imagineX, imagineY, width, height)
+
+        // 실제 x, y 값
+        let cloudScreenX = posX + width - wind
+        if(cloudScreenX < 0) cloudScreenX += mapWidth
+        const cloudScreenY = posY - height
+
+        const isWithinCloud = isWithinRect(cloudScreenX, cloudScreenY, width, height)
+
+        function selectArr (arr) {
+            arr.forEach((l, idx) => {
+                ctx.fillStyle = 'black'
+                ctx.font = '24px noto-sans'
+                let textheight = ctx.measureText(l).actualBoundingBoxAscent + 10
+                ctx.fillText(l, imagineX + 50, imagineY + idx * textheight + height / 2 - 5)
+            })
+        }
+
+        if(isWithinCloud && keys.a){
+            selectArr(as) // 답 구름
+        }else{
+            selectArr(qs) // 질문 구름
+        }
+    })
+}
+
+function manual () {
+    const posX = mhw - cameraX - screenWidth / 4
+    const posY = mhh - cameraY + screenHeight / 10
+    ctx.font = '32px noto-sans'
+    ctx.fillStyle = 'white'
+    ctx.textAlign = 'center'
+    ctx.fillText('이동', posX+ 30, posY + 45)
+    ctx.fillText('⬆️', posX + 31, posY + 100)
+    ctx.fillText('⬅️⬇️➡️', posX + 30, posY + 140)
+
+    ctx.fillStyle = 'white'
+    ctx.fillText('부스터', posX + 230 , posY + 45)
+    ctx.fillText('상호작용', posX + 430 , posY + 45)
+    
+    ctx.font = '24px noto-sans'
+    ctx.fillStyle = '#00A6ED'
+    // 부스터 키
+    ctx.fillRect(posX + 215 , posY + 110, 30, 30)
+    
+    // 상호작용 키
+    ctx.fillRect(posX + 415 , posY + 70, 30, 30)
+    ctx.fillRect(posX + 375 , posY + 110, 30, 30)
+    ctx.fillRect(posX + 415 , posY + 110, 30, 30)
+    ctx.fillRect(posX + 455 , posY + 110, 30, 30)
+    
+    // 부스터 키
+    ctx.fillStyle = 'white'
+    ctx.fillText('Z', posX + 230 , posY + 135)
+    
+    ctx.fillStyle = 'white'
+    ctx.fillText('W', posX + 430 , posY + 95)
+    ctx.fillText('A', posX + 390 , posY + 135)
+    ctx.fillText('S', posX + 430 , posY + 135)
+    ctx.fillText('D', posX + 470 , posY + 135)
+    
+}
+
+function skillVillage () {
+    ctx.fillStyle = '#888'
+    ctx.fillRect(- cameraX, mhh -cameraY, mhw, mhh)
+}
+function bugVillage(){
+    ctx.fillStyle = '#111'
+    ctx.fillRect(mhw - cameraX, mhh - cameraY, mhw, mhh)
+}
+
+
+function drawMap() {
+    // 기본 배경
+    bg()
+    guide()
+    
+    wind <= mapWidth ? wind += 2 : wind = 0
+    
+    dream()
+    wooparoopa()
+    drawPortal()
+    manual()
 }
 
 function aboutMe () {
@@ -199,9 +334,9 @@ function aboutMe () {
         let textMaker = text.slice(0, i)
         ment(textMaker, text)
     } else if (currentTime < 12000) {
-        ment('지금부터 저와 함께')
+        ment('지금부터')
     } else if (currentTime < 16000) {
-        ment('여행을 떠나 보겠습니다.')
+        ment('여행을 떠나요.')
     } else if (currentTime < 20000) {
         if (!fadingOut) {
             fadingOut = true
@@ -213,7 +348,7 @@ function aboutMe () {
         let alpha = 1 - fadeOutTime / fadeOutDuration
 
         if (alpha > 0) {
-            ment('여행을 떠나 보겠습니다.','여행을 떠나 보겠습니다.' ,alpha)
+            ment('여행을 떠나요.','여행을 떠나요.' ,alpha)
         }
     } else {
         // 애니메이션 종료, 초기화
@@ -223,132 +358,4 @@ function aboutMe () {
     }
 
     ctx.globalAlpha = 1 // 투명도 리셋
-}
-
-function projectVillage () {
-    ctx.fillStyle = '#111'
-    ctx.fillRect(mhw - cameraX, -cameraY, mhw, mhh)
-    
-    // 포탈
-    ctx.fillStyle = portal.color
-    ctx.beginPath()
-    ctx.ellipse(portal.x - cameraX, portal.y - cameraY, portal.width / 2, portal.height / 2, 0, 0, Math.PI * 2)
-    ctx.fill()
-    
-}
-
-function dream () {
-    ctx.textAlign = 'left'
-    // 질문 구름
-    
-    questions.forEach((question, i) => {
-        let longestWidth = 0
-        let longestLength = 0
-        const {q, a, posX, posY} = question
-        const qs = q.split('\n')
-        const as = a.split('\n')
-        const merges = [...qs, ...as]
-        merges.forEach(l => {
-            const textWidth = ctx.measureText(l).width
-            if(longestWidth < textWidth) longestWidth = textWidth
-        })
-        qs.length > as.length ? longestLength = qs.length : longestLength = as.length
-        if(longestLength === 1) longestLength = 2
-        const width = longestWidth + 100
-        const height = 100 * longestLength
-
-        let imagineX = posX - cameraX + width - wind
-        if(imagineX < -width){
-            imagineX += mapWidth
-        }else{
-            imagineX = posX - cameraX + width - wind
-        }
-        const imagineY = posY - cameraY - height
-
-        ctx.drawImage(cloudImage, imagineX, imagineY, width, height)
-
-        // 실제 x, y 값
-        let cloudScreenX = posX + width - wind
-        if(cloudScreenX < 0) cloudScreenX += mapWidth
-        const cloudScreenY = posY - height
-
-        const isWithinCloud =
-        character.x > cloudScreenX &&
-        character.x < cloudScreenX + width &&
-        character.y > cloudScreenY &&
-        character.y < cloudScreenY + height
-
-        function selectArr (arr) {
-            arr.forEach((l, idx) => {
-                ctx.fillStyle = 'black'
-                ctx.font = '24px noto-sans'
-                let textheight = ctx.measureText(l).actualBoundingBoxAscent + 10
-                ctx.fillText(l, imagineX + 50, imagineY + idx * textheight + height / 2 - 5)
-            })
-        }
-
-        if(isWithinCloud && keys.a){
-            selectArr(as) // 답 구름
-        }else{ 
-            selectArr(qs) // 질문 구름
-        }
-    })
-}
-
-function manual () {
-    const posX = mhw - cameraX - screenWidth / 4
-    const posY = mhh - cameraY + screenHeight / 10
-    ctx.font = '32px noto-sans'
-    ctx.fillStyle = 'white'
-    ctx.textAlign = 'center'
-    ctx.fillText('이동', posX+ 30, posY + 45)
-    ctx.fillText('⬆️', posX + 31, posY + 100)
-    ctx.fillText('⬅️⬇️➡️', posX + 30, posY + 140)
-
-    ctx.fillText('부스터', posX + 230 , posY + 45)
-    ctx.fillStyle = '#00A6ED'
-    ctx.fillRect(posX + 215 , posY + 100, 30, 30)
-    ctx.fillStyle = 'white'
-    ctx.fillText('Z', posX + 230 , posY + 126)
-
-    ctx.fillText('상호작용', posX + 430 , posY + 45)
-    ctx.fillStyle = '#00A6ED'
-    ctx.fillRect(posX + 415 , posY + 100, 30, 30)
-    ctx.fillStyle = 'white'
-    ctx.fillText('A', posX + 430 , posY + 126)
-    
-    // 상호작용
-    // A
-    // ctx.fillText()
-}
-
-function skillVillage () {
-    ctx.fillStyle = '#888'
-    ctx.fillRect(- cameraX, mhh -cameraY, mhw, mhh)
-}
-function bugVillage(){
-    ctx.fillStyle = '#111'
-    ctx.fillRect(mhw - cameraX, mhh - cameraY, mhw, mhh)
-}
-
-
-
-function drawMap() {
-    // 기본 배경
-    bg()
-    guide()
-    
-    if(wind <= mapWidth){
-        wind += 2
-    }else{
-        wind = 0
-    }
-    dream()
-    wooparoopa()
-    drawPortal()
-    manual()
-    // aboutMe()
-    // projectVillage()
-    // bugVillage()
-    // skillVillage()
 }
